@@ -3,6 +3,7 @@ package com.riis.rainorshine.ui;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +51,12 @@ public class ForecastFragment extends Fragment {
         recyclerView.setAdapter(mForecastAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        new FetchWeatherTask().execute("94043");
     }
 
     @Override
