@@ -9,13 +9,11 @@ import android.widget.TextView;
 import com.riis.rainorshine.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>
 {
     private ArrayList<String> mList = new ArrayList<>();
-    private String[] mTempList = {"Today - Sunny - 88 / 63", "Tomorrow - Foggy - 70 / 46",
-                    "Weds - Cloudy - 72 / 63", "Thurs - Rainy - 64 / 51",
-                    "Fri - Foggy - 70 / 46", "Saturday - Sunny - 76 / 68"};
 
     @Override
     public ForecastViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -27,13 +25,20 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     @Override
     public void onBindViewHolder(ForecastViewHolder holder, int position)
     {
-        holder.forecastLabel.setText(mTempList[position]);
+        holder.forecastLabel.setText(mList.get(position));
     }
 
     @Override
     public int getItemCount()
     {
-        return mTempList.length;
+        return mList.size();
+    }
+
+    public void refresh(String[] weatherData)
+    {
+        mList.clear();
+        mList.addAll(Arrays.asList(weatherData));
+        notifyDataSetChanged();
     }
 
     final class ForecastViewHolder extends RecyclerView.ViewHolder
