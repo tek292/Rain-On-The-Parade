@@ -1,6 +1,12 @@
 package com.riis.rainorshine.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.Time;
+import android.util.Log;
+
+import com.riis.rainorshine.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,13 +16,20 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class WeatherDataParser {
-//    private static final String LOG_TAG = WeatherDataParser.class.getSimpleName();
+    private static final String LOG_TAG = WeatherDataParser.class.getSimpleName();
+
+    private Context mContext;
+
+    public WeatherDataParser(Context context)
+    {
+        mContext = context;
+    }
 
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings.
      */
-    public static String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
+    public String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
             throws JSONException
     {
         if(forecastJsonStr == null)
@@ -53,6 +66,16 @@ public class WeatherDataParser {
         dayTime = new Time();
 
         String[] resultStrs = new String[numDays];
+
+        // Data is fetched in Celsius by default.
+        // If user prefers to see in Fahrenheit, convert the values here.
+        // We do this rather than fetching in Fahrenheit so that the user can
+        // change this option without us having to re-fetch the data once
+        // we start storing the values in a database.
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String unitType = sharedPrefs.getString(mContext.getString(R.string.pref_units_key),
+                mContext.getString(R.string.pref_units_metric));
+
         for(int i = 0; i < weatherArray.length(); i++)
         {
             // For now, using the format "Day, description, hi/low"
@@ -81,7 +104,7 @@ public class WeatherDataParser {
             double high = temperatureObject.getDouble(OWM_MAX);
             double low = temperatureObject.getDouble(OWM_MIN);
 
-            highAndLow = formatHighLows(high, low);
+            highAndLow = formatHighLows(high, low, unitType);
             resultStrs[i] = day + " - " + description + " - " + highAndLow;
         }
 
@@ -92,7 +115,7 @@ public class WeatherDataParser {
     /**
      * Date/Time conversion.
      */
-    private static String getReadableDateString(long time)
+    private String getReadableDateString(long time)
     {
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
@@ -103,8 +126,18 @@ public class WeatherDataParser {
     /**
      * Prepare the weather high/lows for presentation.
      */
-    private static String formatHighLows(double high, double low)
+    private String formatHighLows(double high, double low, String unitType)
     {
+        if(unitType.equals(mContext.getString(R.string.pref_units_imperial)))
+        {
+            high = (high * 1.8) + 32;
+            low = (low * 1.8) + 32;
+        }
+        else if(!unitType.equals(mContext.getString(R.string.pref_units_metric)))
+        {
+            Log.d(LOG_TAG, "Unit type not found: "+ unitType);
+        }
+
         // For presentation, assume the user doesn't care about tenths of a degree.
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);

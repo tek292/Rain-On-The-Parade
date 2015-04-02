@@ -1,9 +1,11 @@
 package com.riis.rainorshine.ui;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,26 +29,38 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment
+{
     private ForecastAdapter mForecastAdapter;
+    private String mLocation;
+    private String mUnits;
+    private WeatherDataParser mWeatherDataParser;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mLocation = prefs.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        mUnits = prefs.getString(getString(R.string.pref_units_key),
+                getString(R.string.pref_units_metric));
+
+        mWeatherDataParser = new WeatherDataParser(getActivity());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
-        mForecastAdapter = new ForecastAdapter();
+        mForecastAdapter = new ForecastAdapter(getActivity());
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mForecastAdapter);
 
@@ -54,20 +68,25 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        new FetchWeatherTask().execute("94043");
+    public void onStart()
+    {
+        super.onStart();
+        new FetchWeatherTask().execute(mLocation, mUnits);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
         inflater.inflate(R.menu.forcast_fragment, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_refresh) {
-            new FetchWeatherTask().execute("94043");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            mLocation = prefs.getString(getString(R.string.pref_location_key),
+                    getString(R.string.pref_location_default));
+            new FetchWeatherTask().execute(mLocation, mUnits);
         }
 
         return super.onOptionsItemSelected(item);
@@ -94,7 +113,7 @@ public class ForecastFragment extends Fragment {
             Uri uri = Uri.parse(BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_PARAM, params[0])
                     .appendQueryParameter(QUERY_MODE, "json")
-                    .appendQueryParameter(QUERY_UNIT, "metric")
+                    .appendQueryParameter(QUERY_UNIT, params[1])
                     .appendQueryParameter(QUERY_DAYS, "7")
                     .build();
 
@@ -153,7 +172,7 @@ public class ForecastFragment extends Fragment {
             }
 
             try {
-                return WeatherDataParser.getWeatherDataFromJson(forecastJsonStr, 7);
+                return mWeatherDataParser.getWeatherDataFromJson(forecastJsonStr, 7);
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;

@@ -1,12 +1,16 @@
 package com.riis.rainorshine.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.riis.rainorshine.R;
+import com.riis.rainorshine.ui.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +18,12 @@ import java.util.Arrays;
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>
 {
     private ArrayList<String> mList = new ArrayList<>();
+    private Context mContext;
+
+    public ForecastAdapter(Context context)
+    {
+        mContext = context;
+    }
 
     @Override
     public ForecastViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -23,9 +33,17 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     }
 
     @Override
-    public void onBindViewHolder(ForecastViewHolder holder, int position)
+    public void onBindViewHolder(ForecastViewHolder holder, final int position)
     {
         holder.forecastLabel.setText(mList.get(position));
+        holder.forecastRow.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mContext.startActivity(new Intent(mContext, DetailActivity.class).putExtra(Intent.EXTRA_TEXT, mList.get(position)));
+            }
+        });
     }
 
     @Override
@@ -44,10 +62,12 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     final class ForecastViewHolder extends RecyclerView.ViewHolder
     {
         TextView forecastLabel;
+        View forecastRow;
 
         public ForecastViewHolder(View itemView) {
             super(itemView);
 
+            forecastRow = itemView;
             forecastLabel = (TextView) itemView.findViewById(R.id.list_item_forecast_textview);
         }
     }
