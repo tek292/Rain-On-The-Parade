@@ -1,4 +1,4 @@
-package com.riis.rainorshine.ui;
+package com.riis.rainontheparade.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.riis.rainorshine.R;
+import com.riis.rainontheparade.R;
 
 
 public class MainActivity extends ActionBarActivity

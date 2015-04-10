@@ -1,4 +1,4 @@
-package com.riis.rainorshine.util;
+package com.riis.rainontheparade.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.riis.rainorshine.R;
-import com.riis.rainorshine.ui.DetailActivity;
+import com.riis.rainontheparade.R;
+import com.riis.rainontheparade.ui.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

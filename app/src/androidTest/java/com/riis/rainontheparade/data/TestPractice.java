@@ -1,8 +1,9 @@
-package com.riis.rainorshine.data;
+package com.riis.rainontheparade.data;
 
 import android.test.AndroidTestCase;
 
-public class TestPractice extends AndroidTestCase {
+public class TestPractice extends AndroidTestCase
+{
     /*
         This gets run before every test.
      */
@@ -11,7 +12,8 @@ public class TestPractice extends AndroidTestCase {
         super.setUp();
     }
 
-    public void testThatDemonstratesAssertions() throws Throwable {
+    public void testThatDemonstratesAssertions() throws Throwable
+    {
         int a = 5;
         int b = 3;
         int c = 5;
@@ -21,13 +23,15 @@ public class TestPractice extends AndroidTestCase {
         assertTrue("Y should be true", d > a);
         assertFalse("Z should be false", a == b);
 
-        if (b > d) {
+        if (b > d)
+        {
             fail("XX should never happen");
         }
     }
 
     @Override
-    protected void tearDown() throws Exception {
+    protected void tearDown()
+            throws Exception {
         super.tearDown();
     }
 }

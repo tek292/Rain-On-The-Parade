@@ -1,4 +1,4 @@
-package com.riis.rainorshine;
+package com.riis.rainontheparade;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

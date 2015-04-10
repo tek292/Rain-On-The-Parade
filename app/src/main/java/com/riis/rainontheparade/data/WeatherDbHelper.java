@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.riis.rainorshine.data;
+package com.riis.rainontheparade.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.riis.rainorshine.data.WeatherContract.WeatherEntry;
+import static com.riis.rainontheparade.data.WeatherContract.WeatherEntry;
 
 /**
  * Manages a local database for weather data.

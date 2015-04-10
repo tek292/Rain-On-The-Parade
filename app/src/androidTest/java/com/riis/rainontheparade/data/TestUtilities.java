@@ -1,4 +1,4 @@
-package com.riis.rainorshine.data;
+package com.riis.rainontheparade.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
-import com.riis.rainorshine.utils.PollingCheck;
+import com.riis.rainontheparade.util.PollingCheck;
 
 import java.util.Map;
 import java.util.Set;
@@ -20,19 +20,23 @@ import java.util.Set;
     Content Provider.  Note that you'll want your WeatherContract class to exactly match the one
     in our solution to use these as-given.
  */
-public class TestUtilities extends AndroidTestCase {
+public class TestUtilities extends AndroidTestCase
+{
     static final String TEST_LOCATION = "99705";
     static final long TEST_DATE = 1419033600L;  // December 20th, 2014
 
-    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues)
+    {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
         valueCursor.close();
     }
 
-    static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
+    static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues)
+    {
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
-        for (Map.Entry<String, Object> entry : valueSet) {
+        for (Map.Entry<String, Object> entry : valueSet)
+        {
             String columnName = entry.getKey();
             int idx = valueCursor.getColumnIndex(columnName);
             assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
@@ -46,7 +50,8 @@ public class TestUtilities extends AndroidTestCase {
     /*
         Students: Use this to create some default weather values for your database tests.
      */
-    static ContentValues createWeatherValues(long locationRowId) {
+    static ContentValues createWeatherValues(long locationRowId)
+    {
         ContentValues weatherValues = new ContentValues();
         weatherValues.put(WeatherContract.WeatherEntry.COLUMN_LOC_KEY, locationRowId);
         weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, TEST_DATE);
@@ -66,7 +71,8 @@ public class TestUtilities extends AndroidTestCase {
         Students: You can uncomment this helper function once you have finished creating the
         LocationEntry part of the WeatherContract.
      */
-    static ContentValues createNorthPoleLocationValues() {
+    static ContentValues createNorthPoleLocationValues()
+    {
         // Create a new map of values, where column names are the keys
         ContentValues testValues = new ContentValues();
         testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
@@ -81,7 +87,8 @@ public class TestUtilities extends AndroidTestCase {
         Students: You can uncomment this function once you have finished creating the
         LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
      */
-    static long insertNorthPoleLocationValues(Context context) {
+    static long insertNorthPoleLocationValues(Context context)
+    {
         // insert our test records into the database
         WeatherDbHelper dbHelper = new WeatherDbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -104,7 +111,8 @@ public class TestUtilities extends AndroidTestCase {
         Note that this only tests that the onChange function is called; it does not test that the
         correct Uri is returned.
      */
-    static class TestContentObserver extends ContentObserver {
+    static class TestContentObserver extends ContentObserver
+    {
         final HandlerThread mHT;
         boolean mContentChanged;
 
@@ -145,7 +153,8 @@ public class TestUtilities extends AndroidTestCase {
         }
     }
 
-    static TestContentObserver getTestContentObserver() {
+    static TestContentObserver getTestContentObserver()
+    {
         return TestContentObserver.getTestContentObserver();
     }
 }

@@ -1,4 +1,4 @@
-package com.riis.rainorshine.ui;
+package com.riis.rainontheparade.ui;
  
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -6,7 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import com.riis.rainorshine.R;
+import com.riis.rainontheparade.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
